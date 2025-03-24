@@ -15,7 +15,7 @@ interface SavedBeyblade {
 
 const Arena = () => {
   const [savedBeyblade, setSavedBeyblade] = useState<SavedBeyblade | null>(null);
-  const [launchReady, setLaunchReady] = useState(false);
+  const [launchPower, setLaunchPower] = useState(0);
   const [battleStarted, setBattleStarted] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const Arena = () => {
 
   const handleLaunch = (power: number) => {
     if (power > 0) {
-      setLaunchReady(true);
+      setLaunchPower(power);
       
       const powerMessage = power <= 3 
         ? "Weak launch! Try to pull harder next time." 
@@ -47,6 +47,10 @@ const Arena = () => {
         duration: 3000,
       });
     }
+  };
+
+  const handleBattleStateChange = (isStarted: boolean) => {
+    setBattleStarted(isStarted);
   };
 
   return (
@@ -112,10 +116,18 @@ const Arena = () => {
                 </Link>
               </div>
               
-              <LaunchControl onLaunch={handleLaunch} className="mb-12" />
+              <LaunchControl 
+                onLaunch={handleLaunch} 
+                className="mb-12"
+                disabled={battleStarted}
+              />
             </div>
             
-            <BeybladeArena />
+            <BeybladeArena
+              playerLaunchPower={launchPower}
+              onBattleStateChange={handleBattleStateChange}
+              playerBeyblade={savedBeyblade}
+            />
           </div>
         )}
       </section>

@@ -6,47 +6,50 @@ import { ArrowUp } from "lucide-react";
 interface LaunchControlProps {
   className?: string;
   onLaunch: (power: number) => void;
+  disabled?: boolean;
 }
 
-const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
+const LaunchControl = ({ className, onLaunch, disabled = false }: LaunchControlProps) => {
   const [isPulling, setIsPulling] = useState(false);
   const [startY, setStartY] = useState(0);
   const [currentY, setCurrentY] = useState(0);
   const [launchPower, setLaunchPower] = useState(0);
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (disabled) return;
     setIsPulling(true);
     setStartY(e.touches[0].clientY);
     setCurrentY(e.touches[0].clientY);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    if (disabled) return;
     setIsPulling(true);
     setStartY(e.clientY);
     setCurrentY(e.clientY);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isPulling) return;
+    if (!isPulling || disabled) return;
     const y = e.touches[0].clientY;
     setCurrentY(y);
     calculatePower(y);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isPulling) return;
+    if (!isPulling || disabled) return;
     const y = e.clientY;
     setCurrentY(y);
     calculatePower(y);
   };
 
   const handleTouchEnd = () => {
-    if (!isPulling) return;
+    if (!isPulling || disabled) return;
     handleLaunch();
   };
 
   const handleMouseUp = () => {
-    if (!isPulling) return;
+    if (!isPulling || disabled) return;
     handleLaunch();
   };
 
@@ -69,6 +72,7 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
     <div 
       className={cn(
         "w-full max-w-md mx-auto select-none", 
+        disabled ? "opacity-50 pointer-events-none" : "",
         className
       )}
       onMouseUp={handleMouseUp}
@@ -76,7 +80,9 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
       onTouchEnd={handleTouchEnd}
     >
       <div className="glass-panel p-6 flex flex-col items-center">
-        <div className="text-lg font-medium mb-4">Launch Control</div>
+        <div className="text-lg font-medium mb-4">
+          {disabled ? "Battle in progress..." : "Launch Control"}
+        </div>
         
         <div className="w-full h-40 bg-background/60 rounded-xl relative mb-4 overflow-hidden">
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-primary/20 to-transparent pointer-events-none"></div>
@@ -86,7 +92,8 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
               className={cn(
                 "w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white font-bold cursor-grab transition-transform",
                 isPulling ? "cursor-grabbing" : "",
-                launchPower > 7 ? "animate-pulse-glow" : ""
+                launchPower > 7 ? "animate-pulse-glow" : "",
+                disabled ? "bg-gray-500" : ""
               )}
               style={{ 
                 transform: isPulling 
@@ -101,7 +108,8 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
               <ArrowUp 
                 className={cn(
                   "transition-transform", 
-                  isPulling ? "scale-75" : "animate-bounce"
+                  !disabled && !isPulling ? "animate-bounce" : "",
+                  isPulling ? "scale-75" : ""
                 )} 
               />
             </div>
@@ -120,9 +128,11 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
         </div>
         
         <div className="text-sm text-muted-foreground mt-2 text-center">
-          {isPulling 
-            ? "Release to launch!" 
-            : "Pull up and release to launch your Beyblade"}
+          {disabled 
+            ? "Wait for the battle to end" 
+            : isPulling 
+              ? "Release to launch!" 
+              : "Pull up and release to launch your Beyblade"}
         </div>
       </div>
     </div>
