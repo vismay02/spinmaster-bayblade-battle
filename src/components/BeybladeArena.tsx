@@ -1,7 +1,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import Beyblade, { BeybladeProps } from "./Beyblade";
+import Beyblade, { BeybladeProps, BeybladeType } from "./Beyblade";
 
 interface ArenaProps {
   className?: string;
@@ -18,14 +18,14 @@ const BeybladeArena = ({ className }: ArenaProps) => {
   const player = {
     name: "Striker",
     color: "blue" as const,
-    type: "attack" as const,
+    type: "attack" as BeybladeType,
     power: 8,
   };
 
   const opponent = {
     name: "Defender",
     color: "red" as const,
-    type: "defense" as const,
+    type: "defense" as BeybladeType,
     power: 7,
   };
 
