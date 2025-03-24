@@ -51,9 +51,11 @@ const LaunchControl = ({ className, onLaunch }: LaunchControlProps) => {
   };
 
   const calculatePower = (y: number) => {
+    // Calculate distance pulled (startY - y is positive when pulling up)
     const distance = Math.max(0, startY - y);
-    const maxDistance = 200; // Maximum pull distance
-    const power = Math.min(10, Math.floor((distance / maxDistance) * 10));
+    // Lower the maxDistance to make it easier to reach higher power levels
+    const maxDistance = 100; // Changed from 200 to 100 for easier high power reaches
+    const power = Math.min(10, Math.floor((distance / maxDistance) * 10) + 1);
     setLaunchPower(power);
   };
 
