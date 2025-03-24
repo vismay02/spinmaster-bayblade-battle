@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import UserMenu from "./UserMenu";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -42,17 +43,20 @@ const Header = () => {
           <span className="text-xl font-bold">BeyGame</span>
         </Link>
 
-        <nav className="flex gap-1">
-          <NavLink to="/" isActive={isActive("/")}>
-            Home
-          </NavLink>
-          <NavLink to="/customize" isActive={isActive("/customize")}>
-            Customize
-          </NavLink>
-          <NavLink to="/arena" isActive={isActive("/arena")}>
-            Arena
-          </NavLink>
-        </nav>
+        <div className="flex items-center gap-4">
+          <nav className="flex gap-1">
+            <NavLink to="/" isActive={isActive("/")}>
+              Home
+            </NavLink>
+            <NavLink to="/customize" isActive={isActive("/customize")}>
+              Customize
+            </NavLink>
+            <NavLink to="/arena" isActive={isActive("/arena")}>
+              Arena
+            </NavLink>
+          </nav>
+          <UserMenu />
+        </div>
       </div>
     </header>
   );

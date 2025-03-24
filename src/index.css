@@ -5,44 +5,48 @@
 
 @layer base {
   :root {
-    --background: 220 33% 4%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 100%;
+    --foreground: 20 14.3% 4.1%;
+    --card: 0 0% 100%;
+    --card-foreground: 20 14.3% 4.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 14.3% 4.1%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 60 4.8% 95.9%;
+    --secondary-foreground: 24 9.8% 10%;
+    --muted: 60 4.8% 95.9%;
+    --muted-foreground: 25 5.3% 44.7%;
+    --accent: 60 4.8% 95.9%;
+    --accent-foreground: 24 9.8% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 20 5.9% 90%;
+    --input: 20 5.9% 90%;
+    --ring: 20 14.3% 4.1%;
+    --radius: 0.5rem;
+  }
 
-    --card: 220 20% 8%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 220 20% 8%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 196 94% 48%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 220 20% 12%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 220 20% 12%;
-    --muted-foreground: 215 20% 65%;
-
-    --accent: 220 20% 12%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 220 20% 18%;
-    --input: 220 20% 18%;
-    --ring: 224 76% 48%;
-
-    --radius: 0.75rem;
-
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 224 76% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 16%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 220 20% 16%;
-    --sidebar-ring: 224 76% 48%;
+  .dark {
+    --background: 20 14.3% 4.1%;
+    --foreground: 60 9.1% 97.8%;
+    --card: 20 14.3% 4.1%;
+    --card-foreground: 60 9.1% 97.8%;
+    --popover: 20 14.3% 4.1%;
+    --popover-foreground: 60 9.1% 97.8%;
+    --primary: 47.9 95.8% 53.1%;
+    --primary-foreground: 26 83.3% 14.1%;
+    --secondary: 12 6.5% 15.1%;
+    --secondary-foreground: 60 9.1% 97.8%;
+    --muted: 12 6.5% 15.1%;
+    --muted-foreground: 24 5.4% 63.9%;
+    --accent: 12 6.5% 15.1%;
+    --accent-foreground: 60 9.1% 97.8%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%;
+    --border: 12 6.5% 15.1%;
+    --input: 12 6.5% 15.1%;
+    --ring: 35.5 91.7% 32.9%;
   }
 }
 
@@ -50,82 +54,20 @@
   * {
     @apply border-border;
   }
-
   body {
-    @apply bg-background text-foreground antialiased overflow-x-hidden;
-    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
-  }
-
-  html {
-    @apply scroll-smooth;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  .glass-panel {
-    @apply bg-secondary/30 backdrop-blur-lg border border-white/10 rounded-2xl shadow-xl;
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px 0 rgba(234, 179, 8, 0.5);
   }
-  
-  .beyblade-shadow {
-    @apply before:content-[''] before:absolute before:inset-0 before:bg-black/20 before:rounded-full before:blur-md before:-z-10;
-  }
-  
-  .text-glow {
-    @apply text-shadow-lg text-primary;
-    text-shadow: 0 8px 16px rgba(14, 165, 233, 0.5);
-  }
-  
-  .page-container {
-    @apply w-full min-h-screen flex flex-col items-center px-6 pt-20 pb-12 overflow-hidden;
-  }
-  
-  .section-title {
-    @apply text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-foreground opacity-0 animate-fade-in [animation-delay:400ms];
-  }
-  
-  .page-fade-in {
-    @apply opacity-0 animate-fade-in;
-  }
-  
-  .button-glow {
-    @apply transition-all hover:shadow-[0_0_15px_rgba(14,165,233,0.5)];
+  50% {
+    box-shadow: 0 0 20px 5px rgba(234, 179, 8, 0.8);
   }
 }
 
-@layer utilities {
-  .text-shadow-sm {
-    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-  }
-  
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.25);
-  }
-  
-  .text-shadow-md {
-    text-shadow: 0 4px 8px rgba(0,0,0,0.25);
-  }
-  
-  .text-shadow-lg {
-    text-shadow: 0 8px 16px rgba(0,0,0,0.25);
-  }
-  
-  .text-shadow-xl {
-    text-shadow: 0 16px 32px rgba(0,0,0,0.25);
-  }
-  
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-  
-  .animation-delay-600 {
-    animation-delay: 600ms;
-  }
-  
-  .animation-delay-900 {
-    animation-delay: 900ms;
-  }
-  
-  .clip-path-slant {
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-  }
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
 }
