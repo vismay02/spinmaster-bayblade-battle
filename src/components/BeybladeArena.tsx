@@ -1,7 +1,7 @@
 
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { BeybladeType, BeybladeColor } from "./Beyblade";
+import { BeybladeType, BeybladeColor, BeybladeCharacter } from "./Beyblade";
 import ArenaDesign from "./arena/ArenaDesign";
 import BattleControls from "./arena/BattleControls";
 import BattleSimulation from "./arena/BattleSimulation";
@@ -14,6 +14,7 @@ interface ArenaProps {
     name: string;
     type: BeybladeType;
     color: BeybladeColor;
+    character: BeybladeCharacter;
     power: number;
   };
 }
@@ -33,6 +34,7 @@ const BeybladeArena = ({
     name: "Striker",
     color: "blue" as const,
     type: "attack" as BeybladeType,
+    character: "user" as BeybladeCharacter,
     power: 8,
   };
 
@@ -40,6 +42,7 @@ const BeybladeArena = ({
     name: "Defender",
     color: "red" as const,
     type: "defense" as BeybladeType,
+    character: "cat" as BeybladeCharacter,
     power: 7,
   };
 

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Beyblade from "@/components/Beyblade";
@@ -62,6 +61,7 @@ const Home = () => {
                   name="Striker"
                   color="blue"
                   type="attack"
+                  character="user-round"
                   power={9}
                   spinning={loaded}
                   size="lg"
@@ -73,6 +73,7 @@ const Home = () => {
                   name="Defender"
                   color="red"
                   type="defense"
+                  character="dog"
                   power={8}
                   spinning={loaded}
                   size="md"
@@ -84,6 +85,7 @@ const Home = () => {
                   name="Endurance"
                   color="green"
                   type="stamina"
+                  character="bird"
                   power={7}
                   spinning={loaded}
                   size="md"

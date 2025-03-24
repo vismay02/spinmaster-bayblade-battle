@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import BeybladeArena from "@/components/BeybladeArena";
 import LaunchControl from "@/components/LaunchControl";
-import Beyblade, { BeybladeType, BeybladeColor } from "@/components/Beyblade";
+import Beyblade, { BeybladeType, BeybladeColor, BeybladeCharacter } from "@/components/Beyblade";
 
 interface SavedBeyblade {
   name: string;
   type: BeybladeType;
   color: BeybladeColor;
+  character: BeybladeCharacter;
   power: number;
 }
 
@@ -90,6 +91,7 @@ const Arena = () => {
                     name={savedBeyblade.name}
                     color={savedBeyblade.color}
                     type={savedBeyblade.type}
+                    character={savedBeyblade.character}
                     power={savedBeyblade.power}
                     spinning={false}
                     size="sm"
