@@ -4,8 +4,10 @@ import { cn } from "@/lib/utils";
 import Beyblade, { 
   BeybladeType, 
   BeybladeColor, 
+  BeybladeCharacter,
   BEYBLADE_TYPES, 
-  BEYBLADE_COLORS 
+  BEYBLADE_COLORS,
+  BEYBLADE_CHARACTERS
 } from "./Beyblade";
 
 interface BeybladeCustomizerProps {
@@ -14,6 +16,7 @@ interface BeybladeCustomizerProps {
     name: string;
     type: BeybladeType;
     color: BeybladeColor;
+    character: BeybladeCharacter;
     power: number;
   }) => void;
 }
@@ -22,12 +25,13 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
   const [name, setName] = useState("Striker");
   const [type, setType] = useState<BeybladeType>("attack");
   const [color, setColor] = useState<BeybladeColor>("blue");
+  const [character, setCharacter] = useState<BeybladeCharacter>("user");
   const [power, setPower] = useState(8);
   const [spinning, setSpinning] = useState(false);
 
   const handleSave = () => {
     if (onSave) {
-      onSave({ name, type, color, power });
+      onSave({ name, type, color, character, power });
     }
   };
 
@@ -44,6 +48,7 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
               name={name}
               type={type}
               color={color}
+              character={character}
               power={power}
               spinning={spinning}
               size="lg"
@@ -112,6 +117,30 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
                   aria-label={`Select ${key} color`}
                 />
               ))}
+            </div>
+          </div>
+          
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Character</label>
+            <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
+              {Object.entries(BEYBLADE_CHARACTERS).map(([key, value]) => {
+                const Icon = value.icon;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setCharacter(key as BeybladeCharacter)}
+                    className={cn(
+                      "flex flex-col items-center justify-center p-2 rounded-md transition-all",
+                      character === key 
+                        ? "bg-primary text-white" 
+                        : "bg-secondary/50 text-gray-300 hover:bg-secondary"
+                    )}
+                  >
+                    <Icon size={24} className="mb-1" />
+                    <span className="text-xs">{value.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
           

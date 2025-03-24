@@ -1,5 +1,5 @@
 
-import { BeybladeType, BeybladeColor } from "../Beyblade";
+import { BeybladeType, BeybladeColor, BeybladeCharacter } from "../Beyblade";
 import BeybladeInArena from "./BeybladeInArena";
 import { useBattleAnimation } from "@/hooks/useBattleAnimation";
 
@@ -7,6 +7,7 @@ interface BeybladeData {
   name: string;
   type: BeybladeType;
   color: BeybladeColor;
+  character: BeybladeCharacter;
   power: number;
 }
 
@@ -42,6 +43,7 @@ const BattleSimulation = ({
         name={playerBeyblade.name}
         color={playerBeyblade.color}
         type={playerBeyblade.type}
+        character={playerBeyblade.character}
         power={playerBeyblade.power}
         spinning={spinning}
         x={position1.x}
@@ -53,6 +55,7 @@ const BattleSimulation = ({
         name={opponent.name}
         color={opponent.color}
         type={opponent.type}
+        character={opponent.character}
         power={opponent.power}
         spinning={spinning}
         x={position2.x}

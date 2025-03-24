@@ -1,15 +1,17 @@
-
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { User, Cat, Dog, Bird, UserRound } from "lucide-react";
 
 export type BeybladeType = "attack" | "defense" | "stamina" | "balance";
 export type BeybladeColor = "blue" | "red" | "green" | "yellow" | "purple";
+export type BeybladeCharacter = "user" | "user-round" | "cat" | "dog" | "bird";
 
 export interface BeybladeProps {
   color: BeybladeColor;
   type: BeybladeType;
   name: string;
   power: number;
+  character: BeybladeCharacter;
   spinning?: boolean;
   size?: "sm" | "md" | "lg";
   className?: string;
@@ -30,11 +32,20 @@ export const BEYBLADE_COLORS: Record<BeybladeColor, string> = {
   purple: "bg-beyblade-purple",
 };
 
+export const BEYBLADE_CHARACTERS = {
+  "user": { name: "Human", icon: User },
+  "user-round": { name: "Champion", icon: UserRound },
+  "cat": { name: "Cat", icon: Cat },
+  "dog": { name: "Dog", icon: Dog },
+  "bird": { name: "Bird", icon: Bird },
+};
+
 const Beyblade = ({
   color,
   type,
   name,
   power,
+  character,
   spinning = false,
   size = "md",
   className,
@@ -93,6 +104,17 @@ const Beyblade = ({
     }
   };
 
+  const CharacterIcon = BEYBLADE_CHARACTERS[character].icon;
+  
+  const getIconSize = () => {
+    switch (size) {
+      case "sm": return 12;
+      case "md": return 16;
+      case "lg": return 24;
+      default: return 16;
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -113,7 +135,7 @@ const Beyblade = ({
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none"></div>
         <div className="absolute inset-0 bg-gradient-to-br from-black/20 via-transparent to-black/40 pointer-events-none"></div>
         <div className="w-1/3 h-1/3 bg-background/80 rounded-full flex items-center justify-center z-10">
-          <div className="w-1/2 h-1/2 bg-black/20 rounded-full"></div>
+          <CharacterIcon size={getIconSize()} className="text-white/80" strokeWidth={2.5} />
         </div>
       </div>
     </div>

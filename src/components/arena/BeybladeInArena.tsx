@@ -1,11 +1,12 @@
 
 import React from "react";
-import Beyblade, { BeybladeType, BeybladeColor } from "../Beyblade";
+import Beyblade, { BeybladeType, BeybladeColor, BeybladeCharacter } from "../Beyblade";
 
 interface BeybladeInArenaProps {
   name: string;
   color: BeybladeColor;
   type: BeybladeType;
+  character: BeybladeCharacter;
   power: number;
   spinning: boolean;
   x: number;
@@ -17,6 +18,7 @@ const BeybladeInArena: React.FC<BeybladeInArenaProps> = ({
   name,
   color,
   type,
+  character,
   power,
   spinning,
   x,
@@ -41,6 +43,7 @@ const BeybladeInArena: React.FC<BeybladeInArenaProps> = ({
         name={name}
         color={color}
         type={type}
+        character={character}
         power={power}
         spinning={spinning}
         size="md"

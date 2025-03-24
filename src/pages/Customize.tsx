@@ -1,9 +1,8 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import BeybladeCustomizer from "@/components/BeybladeCustomizer";
-import { BeybladeType, BeybladeColor } from "@/components/Beyblade";
+import { BeybladeType, BeybladeColor, BeybladeCharacter } from "@/components/Beyblade";
 import { ArrowRight } from "lucide-react";
 
 const Customize = () => {
@@ -11,6 +10,7 @@ const Customize = () => {
     name: string;
     type: BeybladeType;
     color: BeybladeColor;
+    character: BeybladeCharacter;
     power: number;
   } | null>(null);
 
@@ -18,6 +18,7 @@ const Customize = () => {
     name: string;
     type: BeybladeType;
     color: BeybladeColor;
+    character: BeybladeCharacter;
     power: number;
   }) => {
     setSavedBeyblade(config);
