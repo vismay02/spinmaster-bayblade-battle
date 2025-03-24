@@ -23,13 +23,18 @@ const BeybladeInArena: React.FC<BeybladeInArenaProps> = ({
   y,
   hasCollisionEffect
 }) => {
+  // Use a fixed size for the collision boundary to ensure consistency
+  const beybladeSize = 60; // pixels
+
   return (
     <div 
       className={`absolute transition-all duration-50 z-10 ${hasCollisionEffect ? 'animate-pulse' : ''}`}
       style={{ 
         left: `${x}%`, 
         top: `${y}%`,
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        width: `${beybladeSize}px`,
+        height: `${beybladeSize}px`,
       }}
     >
       <Beyblade
@@ -39,7 +44,7 @@ const BeybladeInArena: React.FC<BeybladeInArenaProps> = ({
         power={power}
         spinning={spinning}
         size="md"
-        className="transition-opacity duration-500"
+        className={`transition-opacity duration-500 ${hasCollisionEffect ? 'scale-110' : ''}`}
       />
     </div>
   );

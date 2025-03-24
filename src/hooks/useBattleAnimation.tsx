@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { BeybladeType } from "@/components/Beyblade";
 import {
   Position,
@@ -47,18 +47,40 @@ export function useBattleAnimation({
   const [position2, setPosition2] = useState<Position>({ x: 70, y: 70 });
   const [spinning, setSpinning] = useState(false);
   const [collisionEffect, setCollisionEffect] = useState(false);
+  
+  // Use refs to avoid dependency issues in the useEffect
+  const battleRef = useRef(battleStarted);
+  const frameCountRef = useRef(0);
+  const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const collisionDetectedRef = useRef(false);
 
+  // Set initial positions when battle starts
+  useEffect(() => {
+    if (battleStarted) {
+      setPosition1({ x: 30, y: 30 });
+      setPosition2({ x: 70, y: 70 });
+      setSpinning(true);
+      setCollisionEffect(false);
+      battleRef.current = true;
+      frameCountRef.current = 0;
+      onBattleStateChange(true);
+    } else {
+      battleRef.current = false;
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+        animationTimerRef.current = null;
+      }
+      setSpinning(false);
+    }
+  }, [battleStarted, onBattleStateChange]);
+
+  // Main animation effect
   useEffect(() => {
     if (!battleStarted) return;
-
-    // Notify parent component about battle state
-    onBattleStateChange(true);
-
-    let timer: NodeJS.Timeout;
-    let collisionCount = 0;
-    let frameCount = 0;
+    
     let pos1 = { ...position1 };
     let pos2 = { ...position2 };
+    let collisionCount = 0;
     
     // Apply launch power to initial velocity
     const powerMultiplier = (playerLaunchPower || 5) / 5; // Default to mid-power if not provided
@@ -76,8 +98,15 @@ export function useBattleAnimation({
     vel1.x *= powerMultiplier;
     vel1.y *= powerMultiplier;
     
+    // Calculate stamina for both beyblades
+    const playerStamina = calculateStamina(playerBeyblade.type, playerBeyblade.power, playerLaunchPower);
+    const opponentStamina = calculateStamina(opponent.type, opponent.power);
+    const maxStamina = Math.max(playerStamina, opponentStamina);
+    
     const animate = () => {
-      frameCount++;
+      if (!battleRef.current) return;
+      
+      frameCountRef.current++;
       
       // Adjust speed based on power and launch power
       const playerSpeedFactor = (playerBeyblade.power / 10) * (1 + (playerLaunchPower / 10));
@@ -98,10 +127,13 @@ export function useBattleAnimation({
       pos2 = boundary2.position;
       vel2 = boundary2.velocity;
       
-      // Check for collision between beyblades
+      // Check for collision between beyblades - using a more precise collision distance
       const distance = calculateDistance(pos1, pos2);
+      const collisionDistance = 15; // Adjusted for better collision detection
       
-      if (distance < 15) {  // Collision detected
+      // Only process collision if not already in collision state
+      if (distance < collisionDistance && !collisionDetectedRef.current) {
+        collisionDetectedRef.current = true;
         collisionCount++;
         setCollisionEffect(true);
         
@@ -131,20 +163,20 @@ export function useBattleAnimation({
         // Clear collision effect after a short time
         setTimeout(() => {
           setCollisionEffect(false);
+          collisionDetectedRef.current = false;
         }, 300);
+      } else if (distance >= collisionDistance * 1.5) {
+        // Make sure we're far enough apart to reset collision detection
+        collisionDetectedRef.current = false;
       }
       
       // Apply positions
       setPosition1({ x: pos1.x, y: pos1.y });
       setPosition2({ x: pos2.x, y: pos2.y });
       
-      // Calculate stamina for both beyblades
-      const playerStamina = calculateStamina(playerBeyblade.type, playerBeyblade.power, playerLaunchPower);
-      const opponentStamina = calculateStamina(opponent.type, opponent.power);
-      
       // End battle conditions
-      if (frameCount > Math.max(playerStamina, opponentStamina)) {
-        clearTimeout(timer);
+      if (frameCountRef.current > maxStamina) {
+        battleRef.current = false;
         setSpinning(false);
         onBattleStateChange(false);
         
@@ -162,19 +194,21 @@ export function useBattleAnimation({
         return;
       }
       
-      timer = setTimeout(animate, 50);
+      animationTimerRef.current = setTimeout(animate, 50);
     };
     
     animate();
     
     return () => {
-      clearTimeout(timer);
-      onBattleStateChange(false);
+      if (animationTimerRef.current) {
+        clearTimeout(animationTimerRef.current);
+        animationTimerRef.current = null;
+      }
+      // Don't call onBattleStateChange here as it causes the infinite loop
     };
-  }, [battleStarted, playerLaunchPower, playerBeyblade, opponent, onBattleEnd, onBattleStateChange, position1, position2]);
-
-  useEffect(() => {
-    setSpinning(battleStarted);
+    
+    // Only depend on battleStarted to trigger the animation
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [battleStarted]);
 
   return { position1, position2, spinning, collisionEffect };
