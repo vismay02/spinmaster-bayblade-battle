@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import BeybladeArena from "@/components/BeybladeArena";
 import LaunchControl from "@/components/LaunchControl";
 import Beyblade, { BeybladeType, BeybladeColor, BeybladeCharacter } from "@/components/Beyblade";
+import { BitBeast } from "@/types/bitBeast";
+import BitBeastIcon from "@/components/bitbeast/BitBeastIcon";
 
 interface SavedBeyblade {
   name: string;
@@ -12,6 +14,7 @@ interface SavedBeyblade {
   color: BeybladeColor;
   character: BeybladeCharacter;
   power: number;
+  bitBeast?: BitBeast | null;
 }
 
 const Arena = () => {
@@ -93,6 +96,7 @@ const Arena = () => {
                     type={savedBeyblade.type}
                     character={savedBeyblade.character}
                     power={savedBeyblade.power}
+                    bitBeast={savedBeyblade.bitBeast}
                     spinning={false}
                     size="sm"
                   />
@@ -106,13 +110,25 @@ const Arena = () => {
                       <div className="text-xs bg-secondary px-2 py-1 rounded-full">
                         Power: {savedBeyblade.power}/10
                       </div>
+                      
+                      {savedBeyblade.bitBeast && (
+                        <div className="flex items-center gap-1 text-xs bg-primary/80 px-2 py-1 rounded-full">
+                          <BitBeastIcon 
+                            animal={savedBeyblade.bitBeast.animal}
+                            element={savedBeyblade.bitBeast.element}
+                            size="sm"
+                            className="w-4 h-4"
+                          />
+                          {savedBeyblade.bitBeast.name}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
                 
                 <Link
                   to="/customize"
-                  className="px-4 py-2 bg-secondary/80 text-white text-sm font-medium rounded-full transition-all hover:bg-secondary"
+                  className="px-4 py-2 bg-secondary/80 text-white text-sm font-medium rounded-full transition-all hover:scale-105 hover:bg-secondary"
                 >
                   Change Beyblade
                 </Link>

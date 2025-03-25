@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
 import Beyblade, { 
   BeybladeType, 
   BeybladeColor, 
@@ -9,6 +10,9 @@ import Beyblade, {
   BEYBLADE_COLORS,
   BEYBLADE_CHARACTERS
 } from "./Beyblade";
+import { BitBeast } from "@/types/bitBeast";
+import BitBeastSelectionDialog from "./bitbeast/BitBeastSelectionDialog";
+import BitBeastIcon from "./bitbeast/BitBeastIcon";
 
 interface BeybladeCustomizerProps {
   className?: string;
@@ -18,6 +22,7 @@ interface BeybladeCustomizerProps {
     color: BeybladeColor;
     character: BeybladeCharacter;
     power: number;
+    bitBeast: BitBeast | null;
   }) => void;
 }
 
@@ -28,15 +33,35 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
   const [character, setCharacter] = useState<BeybladeCharacter>("user");
   const [power, setPower] = useState(8);
   const [spinning, setSpinning] = useState(false);
+  const [selectedBitBeast, setSelectedBitBeast] = useState<BitBeast | null>(null);
+  const [showBitBeastDialog, setShowBitBeastDialog] = useState(false);
+  const [showSpecialEffect, setShowSpecialEffect] = useState(false);
 
   const handleSave = () => {
     if (onSave) {
-      onSave({ name, type, color, character, power });
+      onSave({ name, type, color, character, power, bitBeast: selectedBitBeast });
     }
   };
 
   const toggleSpin = () => {
     setSpinning(!spinning);
+  };
+
+  const selectBitBeast = (bitBeast: BitBeast) => {
+    setSelectedBitBeast(bitBeast);
+    setShowBitBeastDialog(false);
+    // Automatically update type to match bit-beast combat style
+    setType(bitBeast.combatStyle);
+    // Show special effect animation
+    setShowSpecialEffect(true);
+    setTimeout(() => setShowSpecialEffect(false), 1500);
+  };
+
+  const testSpecialAbility = () => {
+    if (selectedBitBeast) {
+      setShowSpecialEffect(true);
+      setTimeout(() => setShowSpecialEffect(false), 1500);
+    }
   };
 
   return (
@@ -50,17 +75,29 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
               color={color}
               character={character}
               power={power}
+              bitBeast={selectedBitBeast}
               spinning={spinning}
+              specialAbilityActive={showSpecialEffect}
               size="lg"
               className="mx-auto"
             />
           </div>
-          <button
-            onClick={toggleSpin}
-            className="mb-4 px-6 py-2 bg-secondary text-white font-medium rounded-full transition-all hover:bg-secondary/80 active:scale-95 button-glow"
-          >
-            {spinning ? "Stop Spinning" : "Test Spin"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={toggleSpin}
+              className="px-6 py-2 bg-secondary text-white font-medium rounded-full transition-all hover:bg-secondary/80 active:scale-95 button-glow"
+            >
+              {spinning ? "Stop Spinning" : "Test Spin"}
+            </button>
+            {selectedBitBeast && (
+              <button
+                onClick={testSpecialAbility}
+                className="px-6 py-2 bg-primary text-white font-medium rounded-full transition-all hover:bg-primary/80 active:scale-95 button-glow"
+              >
+                Test Special Ability
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="w-full md:w-1/2 glass-panel p-6">
@@ -121,6 +158,49 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
           </div>
           
           <div className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-sm font-medium">Bit-Beast</label>
+              {selectedBitBeast && (
+                <button 
+                  onClick={() => setSelectedBitBeast(null)}
+                  className="text-xs text-red-400 hover:text-red-300"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            
+            {selectedBitBeast ? (
+              <div 
+                className="flex items-center gap-3 p-3 rounded-lg border border-gray-700 bg-background/50 cursor-pointer hover:bg-background/80 transition-colors"
+                onClick={() => setShowBitBeastDialog(true)}
+              >
+                <BitBeastIcon 
+                  animal={selectedBitBeast.animal}
+                  element={selectedBitBeast.element}
+                  size="md"
+                />
+                <div>
+                  <div className="font-medium">{selectedBitBeast.name}</div>
+                  <div className="text-xs text-muted-foreground flex gap-2 items-center">
+                    <span className="capitalize">{selectedBitBeast.animal}</span>
+                    <span>•</span>
+                    <span className="capitalize">{selectedBitBeast.element}</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowBitBeastDialog(true)}
+                className="w-full flex items-center justify-center gap-2 p-3 rounded-lg border border-dashed border-gray-600 hover:border-primary text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Plus size={16} />
+                <span>Select a Bit-Beast</span>
+              </button>
+            )}
+          </div>
+          
+          <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Character</label>
             <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
               {Object.entries(BEYBLADE_CHARACTERS).map(([key, value]) => {
@@ -171,6 +251,14 @@ const BeybladeCustomizer = ({ className, onSave }: BeybladeCustomizerProps) => {
           </button>
         </div>
       </div>
+
+      <BitBeastSelectionDialog
+        open={showBitBeastDialog}
+        onOpenChange={setShowBitBeastDialog}
+        selectedBitBeast={selectedBitBeast}
+        onSelect={selectBitBeast}
+        preferredCombatStyle={type}
+      />
     </div>
   );
 };

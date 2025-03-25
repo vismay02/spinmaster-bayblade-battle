@@ -5,6 +5,7 @@ import { BeybladeType, BeybladeColor, BeybladeCharacter } from "./Beyblade";
 import ArenaDesign from "./arena/ArenaDesign";
 import BattleControls from "./arena/BattleControls";
 import BattleSimulation from "./arena/BattleSimulation";
+import { BitBeast } from "@/types/bitBeast";
 
 interface ArenaProps {
   className?: string;
@@ -16,6 +17,7 @@ interface ArenaProps {
     color: BeybladeColor;
     character: BeybladeCharacter;
     power: number;
+    bitBeast?: BitBeast | null;
   };
 }
 
@@ -28,6 +30,7 @@ const BeybladeArena = ({
   const arenaRef = useRef<HTMLDivElement>(null);
   const [battleStarted, setBattleStarted] = useState(false);
   const [winner, setWinner] = useState<string | null>(null);
+  const [specialAbilityActive, setSpecialAbilityActive] = useState<string | null>(null);
 
   // Use player beyblade from props or fallback to default
   const player = playerBeyblade || {
@@ -36,6 +39,7 @@ const BeybladeArena = ({
     type: "attack" as BeybladeType,
     character: "user" as BeybladeCharacter,
     power: 8,
+    bitBeast: null
   };
 
   const opponent = {
@@ -44,21 +48,33 @@ const BeybladeArena = ({
     type: "defense" as BeybladeType,
     character: "cat" as BeybladeCharacter,
     power: 7,
+    bitBeast: null
   };
 
   const startBattle = () => {
     setWinner(null);
     setBattleStarted(true);
+    setSpecialAbilityActive(null);
   };
 
   const handleBattleEnd = (winnerName: string) => {
     setBattleStarted(false);
     setWinner(winnerName);
+    setSpecialAbilityActive(null);
   };
 
   const handleBattleStateChange = (isStarted: boolean) => {
     setBattleStarted(isStarted);
     onBattleStateChange?.(isStarted);
+  };
+
+  const handleSpecialAbilityActivation = (beybladeId: string) => {
+    setSpecialAbilityActive(beybladeId);
+    
+    // Show special ability effect for a limited time
+    setTimeout(() => {
+      setSpecialAbilityActive(null);
+    }, 2000);
   };
 
   return (
@@ -75,6 +91,8 @@ const BeybladeArena = ({
             playerLaunchPower={playerLaunchPower}
             onBattleEnd={handleBattleEnd}
             onBattleStateChange={handleBattleStateChange}
+            onSpecialAbilityActivation={handleSpecialAbilityActivation}
+            specialAbilityActiveFor={specialAbilityActive}
           />
         )}
       </div>
@@ -83,6 +101,8 @@ const BeybladeArena = ({
         winner={winner}
         battleStarted={battleStarted}
         onStartBattle={startBattle}
+        playerBitBeast={player.bitBeast}
+        opponentBitBeast={opponent.bitBeast}
       />
     </div>
   );
