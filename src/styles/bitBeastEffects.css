@@ -1,132 +1,114 @@
 
-/* Fire element effect */
-.fire-aura::before {
+/* Bit-Beast Elemental Effects */
+.effect-fire {
+  box-shadow: 0 0 15px rgba(255, 125, 0, 0.7);
+  animation: pulse-fire 1.5s infinite alternate;
+}
+
+.effect-water {
+  box-shadow: 0 0 15px rgba(0, 150, 255, 0.7);
+  animation: pulse-water 1.5s infinite alternate;
+}
+
+.effect-earth {
+  box-shadow: 0 0 15px rgba(139, 69, 19, 0.7);
+  animation: ripple-earth 1.5s infinite;
+}
+
+.effect-air {
+  box-shadow: 0 0 15px rgba(200, 230, 255, 0.7);
+  animation: swirl-air 3s infinite linear;
+}
+
+.effect-lightning {
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+  animation: flash-lightning 1s infinite;
+}
+
+.effect-ice {
+  box-shadow: 0 0 15px rgba(150, 240, 255, 0.7);
+  animation: freeze-ice 2s infinite alternate;
+}
+
+.effect-darkness {
+  box-shadow: 0 0 15px rgba(75, 0, 130, 0.7);
+  animation: pulse-darkness 2s infinite alternate;
+}
+
+.effect-light {
+  box-shadow: 0 0 15px rgba(255, 255, 200, 0.7);
+  animation: glow-light 1.5s infinite alternate;
+}
+
+/* Fire animations */
+@keyframes pulse-fire {
+  0% { box-shadow: 0 0 10px rgba(255, 125, 0, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(255, 125, 0, 0.8), 0 0 30px rgba(255, 50, 0, 0.4); }
+}
+
+/* Water animations */
+@keyframes pulse-water {
+  0% { box-shadow: 0 0 10px rgba(0, 150, 255, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(0, 150, 255, 0.8), 0 0 30px rgba(0, 100, 200, 0.4); }
+}
+
+/* Earth animations */
+@keyframes ripple-earth {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(139, 69, 19, 0.5); }
+  50% { box-shadow: 0 0 15px rgba(139, 69, 19, 0.7); }
+  100% { transform: scale(1.05); box-shadow: 0 0 0 rgba(139, 69, 19, 0.5); }
+}
+
+/* Air animations */
+@keyframes swirl-air {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Lightning animations */
+@keyframes flash-lightning {
+  0%, 49%, 51%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 215, 0, 0.7); }
+}
+
+/* Ice animations */
+@keyframes freeze-ice {
+  0% { box-shadow: 0 0 10px rgba(150, 240, 255, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(150, 240, 255, 0.8), 0 0 30px rgba(100, 200, 255, 0.4); }
+}
+
+/* Darkness animations */
+@keyframes pulse-darkness {
+  0% { box-shadow: inset 0 0 10px rgba(75, 0, 130, 0.5); }
+  100% { box-shadow: inset 0 0 20px rgba(75, 0, 130, 0.8), 0 0 15px rgba(75, 0, 130, 0.6); }
+}
+
+/* Light animations */
+@keyframes glow-light {
+  0% { box-shadow: 0 0 10px rgba(255, 255, 200, 0.5); }
+  100% { box-shadow: 0 0 20px rgba(255, 255, 200, 0.8), 0 0 30px rgba(255, 255, 150, 0.4); }
+}
+
+/* Special ability activation effect */
+.ability-activate {
+  position: relative;
+  z-index: 10;
+}
+
+.ability-activate::before {
   content: '';
   position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(251, 146, 60, 0.6) 0%, rgba(251, 146, 60, 0) 70%);
-  border-radius: 50%;
-  animation: pulse 1.5s infinite alternate;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
   z-index: -1;
+  animation: ability-pulse 1s ease-out;
 }
 
-/* Water element effect */
-.water-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.6) 0%, rgba(56, 189, 248, 0) 70%);
-  border-radius: 50%;
-  animation: wave 2s infinite linear;
-  z-index: -1;
-}
-
-/* Earth element effect */
-.earth-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(161, 98, 7, 0.6) 0%, rgba(161, 98, 7, 0) 70%);
-  border-radius: 50%;
-  animation: rumble 0.5s infinite alternate;
-  z-index: -1;
-}
-
-/* Air element effect */
-.air-aura::before {
-  content: '';
-  position: absolute;
-  inset: -10px;
-  background: radial-gradient(circle, rgba(186, 230, 253, 0.5) 0%, rgba(186, 230, 253, 0) 70%);
-  border-radius: 50%;
-  animation: breeze 3s infinite linear;
-  z-index: -1;
-}
-
-/* Lightning element effect */
-.lightning-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(254, 240, 138, 0.7) 0%, rgba(254, 240, 138, 0) 70%);
-  border-radius: 50%;
-  animation: zap 0.8s infinite;
-  z-index: -1;
-}
-
-/* Ice element effect */
-.ice-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(103, 232, 249, 0.6) 0%, rgba(103, 232, 249, 0) 70%);
-  border-radius: 50%;
-  animation: freeze 3s infinite alternate;
-  z-index: -1;
-}
-
-/* Darkness element effect */
-.darkness-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(88, 28, 135, 0.6) 0%, rgba(88, 28, 135, 0) 70%);
-  border-radius: 50%;
-  animation: shadow 2s infinite alternate;
-  z-index: -1;
-}
-
-/* Light element effect */
-.light-aura::before {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  background: radial-gradient(circle, rgba(254, 249, 195, 0.8) 0%, rgba(254, 249, 195, 0) 70%);
-  border-radius: 50%;
-  animation: glow 1.5s infinite alternate;
-  z-index: -1;
-}
-
-/* Animation keyframes */
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  100% { transform: scale(1.2); opacity: 0.3; }
-}
-
-@keyframes wave {
-  0% { clip-path: circle(50% at 50% 50%); }
-  25% { clip-path: circle(50% at 45% 55%); }
-  50% { clip-path: circle(50% at 55% 45%); }
-  75% { clip-path: circle(50% at 55% 55%); }
-  100% { clip-path: circle(50% at 45% 45%); }
-}
-
-@keyframes rumble {
-  0% { transform: translate(0px, 0px) rotate(0deg); }
-  100% { transform: translate(2px, 2px) rotate(1deg); }
-}
-
-@keyframes breeze {
-  0% { transform: rotate(0deg); opacity: 0.5; }
-  100% { transform: rotate(360deg); opacity: 0.2; }
-}
-
-@keyframes zap {
-  0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
-  40%, 60% { opacity: 0.7; transform: scale(1.2); }
-}
-
-@keyframes freeze {
-  0% { opacity: 0.3; filter: blur(4px); }
-  100% { opacity: 0.5; filter: blur(0px); }
-}
-
-@keyframes shadow {
-  0% { transform: scale(1); filter: blur(4px); }
-  100% { transform: scale(1.2); filter: blur(8px); }
-}
-
-@keyframes glow {
-  0% { opacity: 0.3; filter: blur(2px); }
-  100% { opacity: 0.7; filter: blur(4px); }
+@keyframes ability-pulse {
+  0% { transform: scale(0.1); opacity: 0; }
+  50% { opacity: 0.7; }
+  100% { transform: scale(1.5); opacity: 0; }
 }
