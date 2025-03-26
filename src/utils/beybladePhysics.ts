@@ -182,12 +182,12 @@ export const calculateStamina = (
   // Launch power affects stamina (higher launch = shorter duration)
   const launchStaminaFactor = Math.max(0.7, 1.1 - (launchPower / 20)); // 0.7 to 1.1
   
-  // Different stamina values based on beyblade type
+  // Reduced stamina values for quicker battles
   if (type === "stamina") {
-    return 1000 + power * 100 * launchStaminaFactor;
+    return 300 + power * 30 * launchStaminaFactor; // Reduced from 1000+
   } else if (type === "defense") {
-    return 800 + power * 80 * launchStaminaFactor;
+    return 240 + power * 24 * launchStaminaFactor; // Reduced from 800+
   } else {
-    return 600 + power * 60 * launchStaminaFactor;
+    return 180 + power * 18 * launchStaminaFactor; // Reduced from 600+
   }
 };

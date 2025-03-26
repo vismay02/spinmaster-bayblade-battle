@@ -118,25 +118,47 @@ export function useBattleAnimation({
     vel1.x *= powerMultiplier;
     vel1.y *= powerMultiplier;
     
-    // Calculate base stamina
+    // Calculate base stamina with lower values to make battles end faster
     let playerStamina = calculateStamina(playerBeyblade.type, playerBeyblade.power, playerLaunchPower);
     let opponentStamina = calculateStamina(opponent.type, opponent.power);
     
+    // Scale down stamina values to ensure battles end faster
+    playerStamina = Math.floor(playerStamina * 0.3);
+    opponentStamina = Math.floor(opponentStamina * 0.3);
+    
     // Apply bit-beast bonuses
     if (playerBeyblade.bitBeast) {
-      playerStamina += playerBeyblade.bitBeast.powerBonus * 20;
+      playerStamina += playerBeyblade.bitBeast.powerBonus * 10; // Reduced from 20
     }
     
     if (opponent.bitBeast) {
-      opponentStamina += opponent.bitBeast.powerBonus * 20;
+      opponentStamina += opponent.bitBeast.powerBonus * 10; // Reduced from 20
     }
     
     const maxStamina = Math.max(playerStamina, opponentStamina);
+    
+    // Set a hard maximum for battle duration (in frames)
+    const BATTLE_MAX_DURATION = 200; // About 10 seconds at 50ms per frame
     
     const animate = () => {
       if (!battleRef.current) return;
       
       frameCountRef.current++;
+      
+      // Force battle to end if it exceeds maximum duration
+      if (frameCountRef.current > BATTLE_MAX_DURATION) {
+        battleRef.current = false;
+        setSpinning(false);
+        onBattleStateChange(false);
+        
+        // Decide winner based on current power and bit-beast bonuses
+        const playerTotalPower = playerBeyblade.power + (playerBeyblade.bitBeast?.powerBonus || 0);
+        const opponentTotalPower = opponent.power + (opponent.bitBeast?.powerBonus || 0);
+        const winner = playerTotalPower >= opponentTotalPower ? playerBeyblade.name : opponent.name;
+        
+        onBattleEnd(winner);
+        return;
+      }
       
       // Calculate speed factors including bit-beast bonuses
       let playerSpeedFactor = (playerBeyblade.power / 10) * (1 + (playerLaunchPower / 10));
@@ -266,8 +288,13 @@ export function useBattleAnimation({
       setPosition1({ x: pos1.x, y: pos1.y });
       setPosition2({ x: pos2.x, y: pos2.y });
       
-      // Check if battle should end based on stamina or frameCount
-      if (frameCountRef.current > maxStamina) {
+      // Gradually decrease stamina with each frame
+      // This ensures battles will eventually end
+      playerStamina -= 5;
+      opponentStamina -= 5;
+      
+      // End match if either beyblade runs out of stamina or if frameCount exceeds maxStamina
+      if (playerStamina <= 0 || opponentStamina <= 0 || frameCountRef.current > maxStamina) {
         battleRef.current = false;
         setSpinning(false);
         onBattleStateChange(false);
