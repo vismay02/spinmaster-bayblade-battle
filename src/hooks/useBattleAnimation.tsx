@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { BeybladeType, BeybladeCharacter } from "@/components/Beyblade";
 import {
@@ -283,8 +282,8 @@ export function useBattleAnimation({
           if (playerBeyblade.bitBeast.element === "fire") {
             playerFinalStamina *= 0.9; // Fire reduces final stamina
           } else if (playerBeyblade.bitBeast.element === "water" || 
-                    playerBeyblade.bitBeast.element === "stamina") {
-            playerFinalStamina *= 1.2; // Water and stamina increase final stamina
+                    playerBeyblade.bitBeast.combatStyle === "stamina") {
+            playerFinalStamina *= 1.2; // Water and stamina type increase final stamina
           }
         }
         
@@ -292,7 +291,7 @@ export function useBattleAnimation({
           if (opponent.bitBeast.element === "fire") {
             opponentFinalStamina *= 0.9;
           } else if (opponent.bitBeast.element === "water" || 
-                    opponent.bitBeast.element === "stamina") {
+                    opponent.bitBeast.combatStyle === "stamina") {
             opponentFinalStamina *= 1.2;
           }
         }
